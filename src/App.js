@@ -77,7 +77,6 @@ function App() {
         setSongs={setSongs}
         libraryStatus={libraryStatus}
       />
-
       <audio
         onTimeUpdate={timeUpdateHandler}
         onLoadedMetadata={timeUpdateHandler}
