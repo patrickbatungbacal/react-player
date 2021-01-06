@@ -1,13 +1,13 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from "react";
 
 //Import Styles here
 import "./styles/app.scss";
 
 //Components here
-import Song from './components/Song';
-import Player from './components/Player';
-import Library from './components/Library';
-import Nav from './components/Nav';
+import Song from "./components/Song";
+import Player from "./components/Player";
+import Library from "./components/Library";
+import Nav from "./components/Nav";
 
 //Import State/Util
 import data from "./data";
@@ -27,7 +27,7 @@ function App() {
   });
   const [libraryStatus, setLibraryStatus] = useState(false);
 
-  //Event handlers here 
+  //Event handlers here
   const timeUpdateHandler = (e) => {
     const current = e.target.currentTime;
     const duration = e.target.duration;
@@ -35,26 +35,32 @@ function App() {
     //calculate percentage
     const roundedCurrent = Math.round(current);
     const roundedDuration = Math.round(duration);
-    const animationPercentage = Math.round((roundedCurrent / roundedDuration) * 100);
+    const animationPercentage = Math.round(
+      (roundedCurrent / roundedDuration) * 100
+    );
 
-    setSongInfo({...songInfo, currentTime: current, duration, animationPercentage});
+    setSongInfo({
+      ...songInfo,
+      currentTime: current,
+      duration,
+      animationPercentage,
+    });
   };
 
   const songEndHandler = async () => {
     let currentIndex = songs.findIndex((song) => song.id === currentSong.id);
-        await setCurrentSong(songs[(currentIndex + 1) % songs.length]);
+    await setCurrentSong(songs[(currentIndex + 1) % songs.length]);
 
-    if(isPlaying) audioRef.current.play();
-  }
-
+    if (isPlaying) audioRef.current.play();
+  };
 
   return (
-    <div className={`App ${libraryStatus ? 'library-active' : ''}`}>
+    <div className={`App ${libraryStatus ? "library-active" : ""}`}>
       <Nav libraryStatus={libraryStatus} setLibraryStatus={setLibraryStatus} />
       <Song currentSong={currentSong} />
-      <Player 
+      <Player
         audioRef={audioRef}
-        setIsPlaying={setIsPlaying} 
+        setIsPlaying={setIsPlaying}
         isPlaying={isPlaying}
         currentSong={currentSong}
         setCurrentSong={setCurrentSong}
@@ -63,22 +69,22 @@ function App() {
         songs={songs}
         setSongs={setSongs}
       />
-      <Library 
+      <Library
         audioRef={audioRef}
-        songs={songs} 
+        songs={songs}
         setCurrentSong={setCurrentSong}
-        isPlaying={isPlaying} 
+        isPlaying={isPlaying}
         setSongs={setSongs}
         libraryStatus={libraryStatus}
-        />
-      
-      <audio 
+      />
+
+      <audio
         onTimeUpdate={timeUpdateHandler}
-        onLoadedMetadata={timeUpdateHandler} 
-        ref={audioRef} 
+        onLoadedMetadata={timeUpdateHandler}
+        ref={audioRef}
         src={currentSong.audio}
-        onEnded={songEndHandler} >
-      </audio>
+        onEnded={songEndHandler}
+      ></audio>
     </div>
   );
 }
